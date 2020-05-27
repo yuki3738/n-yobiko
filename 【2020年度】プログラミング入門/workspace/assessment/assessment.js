@@ -10,6 +10,12 @@ function removeAllChildren(element) {
   }
 }
 
+userNameInput.onkeydown = (event) => {
+  if (event.key === 'Enter') {
+    assessmentButton.onclick();
+  }
+};
+
 assessmentButton.onclick = () => {
   const userName = userNameInput.value;
   if (userName.length === 0) {
@@ -17,7 +23,6 @@ assessmentButton.onclick = () => {
   }
 
   removeAllChildren(resultDivided);
-  removeAllChildren(tweetDivided);
   const header = document.createElement('h3');
   header.innerText = '診断結果';
   resultDivided.appendChild(header);
@@ -26,6 +31,25 @@ assessmentButton.onclick = () => {
   const result = assessment(userName);
   paragraph.innerText = result;
   resultDivided.appendChild(paragraph);
+
+  removeAllChildren(tweetDivided);
+  const anchor = document.createElement('a');
+  const hrefValue =
+    'https://twitter.com/intent/tweet?button_hashtag=' +
+    encodeURIComponent('あなたのいいところ') +
+    '&ref_src=twsrc%5Etfw';
+
+  anchor.setAttribute('href', hrefValue);
+  // anchor.className = 'twitter-hashtag-button';
+  anchor.setAttribute('class', 'twitter-hashtag-button');
+  anchor.setAttribute('data-text', result);
+  anchor.innerText = 'Tweet #あなたのいいところ';
+
+  tweetDivided.appendChild(anchor);
+
+  const script = document.createElement('script');
+  script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
+  tweetDivided.appendChild(script);
 };
 
 const answers = [
